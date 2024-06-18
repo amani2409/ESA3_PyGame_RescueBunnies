@@ -6,7 +6,7 @@ from classes.spritesheet import SpriteSheet
 from classes.variables import WIDTH, HEIGHT
 
 
-class Bunny(pygame.sprite.Sprite):
+class BunnyNPC(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load('Assets/images/bunnyspriteNpc.png')
@@ -16,6 +16,7 @@ class Bunny(pygame.sprite.Sprite):
     def update(self):
         if self.caught:
             self.rect.x, self.rect.y = pygame.mouse.get_pos()
+
 
 
 class Player(pygame.sprite.Sprite):
@@ -71,11 +72,25 @@ def game(level):
     clock = pygame.time.Clock()
     pygame.display.set_caption('Rescue Bunnies')
 
-    bunny = Bunny()
+    font = pygame.font.SysFont('Arial', 20)
+    quit_button = font.render('Quit [Esc]', True, (255, 255, 255))
+    quit_button_rect = quit_button.get_rect(topright=(WIDTH - 10, 10))
+
+    background = pygame.image.load('Assets/images/background.png')
+    ground = pygame.image.load('Assets/images/ground.png')
+
+    ground = pygame.transform.scale(ground, (WIDTH, ground.get_height()))
+
+    ground_rect = ground.get_rect()
+    ground_rect.y = HEIGHT - ground_rect.height
+
+    bunny = BunnyNPC()
     player = Player()
 
-    if level == 1:
-        levels.Level1(player)
+    player.rect.y = ground_rect.y - player.rect.height
+
+    # if level == 1:
+    #     levels.Level1(player)
 
     player_sprite = pygame.sprite.Group()
     player_sprite.add(player)
@@ -94,12 +109,21 @@ def game(level):
             player.direction = 'right'
             player.moving(5, 0)
 
+        if keys[pygame.K_ESCAPE]:
+            # running = False
+            return "start_menu"
+
         player_sprite.update()
 
-        screen.fill((0, 0, 0))  # Bildschirm löschen
+        # screen.fill((0, 0, 0))  # Bildschirm löschen
+        screen.blit(background, (0, 0))
+        screen.blit(ground, ground_rect)
         player_sprite.draw(screen)
+
+        screen.blit(quit_button, quit_button_rect.topleft)
 
         pygame.display.flip()
         clock.tick(60)
+
 
     pygame.quit()

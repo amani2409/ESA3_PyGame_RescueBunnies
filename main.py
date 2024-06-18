@@ -38,24 +38,29 @@ def main():
 
         # keys = pygame.key.get_pressed()
         # if displayScreen == "login":
+        keys = pygame.key.get_pressed()
 
-        if displayScreen == "start_menu":
+        if displayScreen == 'start_menu':
             draw_startScreen()
-            keys = pygame.key.get_pressed()
             if keys[pygame.K_s]:
-                displayScreen = "game"
+                displayScreen = 'game'
                 game_over = False
                 game(level=1)
             if keys[pygame.K_q]:
-                displayScreen = "exit"
+                displayScreen = 'exit'
                 pygame.quit()
                 quit()
 
-        elif displayScreen == "endScreen":
+        elif keys[pygame.K_ESCAPE]:
+            # running = False
+            displayScreen = "start_menu"
+
+
+        elif displayScreen == 'endScreen':
             draw_endScreen()
             keys = pygame.key.get_pressed()
             if keys[pygame.K_r]:
-                displayScreen = "game"
+                displayScreen = 'game'
                 game(level=1)
             if keys[pygame.K_h]:
                 displayScreen = "start_menu"
