@@ -1,4 +1,6 @@
 import pygame
+
+import levels
 from classes.spritesheet import SpriteSheet
 
 from classes.variables import WIDTH, HEIGHT
@@ -21,55 +23,46 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         spritesheet = SpriteSheet('Assets/images/bunnysprite.png')
 
-        sprite_width = 50
-        sprite_height = 60
-        # self.anims = anims
-        # self.frame = 0
-        # self.image = spritesheet.get_image(self.anims['right'][0])
+        sprite_width = 80
+        sprite_height = 51
 
         self.player_walking_right = []
         self.player_walking_left = []
 
         # initial standing of the player
         self.direction = 'right'
+        self.is_moving = False
 
-        image = spritesheet.get_image(0, 0, sprite_width, sprite_height)
-        self.player_walking_right.append(image)
+        for i in range(3, 6):  # frame 3 - 6 sind für die rechte Richtung
+            image = spritesheet.get_image(i * sprite_width, 0, sprite_width, sprite_height)
+            self.player_walking_right.append(image)
 
-        image = spritesheet.get_image(sprite_width, 0, sprite_width, sprite_height)
-        self.player_walking_right.append(image)
+        for i in range(3):  # frame 1 - 3 sind für die rechte Richtung
+            image = spritesheet.get_image(i * sprite_width, 0, sprite_width, sprite_height)
+            self.player_walking_left.append(image)
 
-        image = spritesheet.get_image(sprite_width*2, 0, sprite_width, sprite_height)
-        self.player_walking_right.append(image)
-
-        image = spritesheet.get_image(0, 0, sprite_width, sprite_height)
-        image = pygame.transform.flip(image, True, False)
-        self.player_walking_left.append(image)
-
-        image = spritesheet.get_image(sprite_width, 0, sprite_width, sprite_height)
-        image = pygame.transform.flip(image, True, False)
-        self.player_walking_left.append(image)
-
-        image = spritesheet.get_image(sprite_width * 2, 0, sprite_width, sprite_height)
-        image = pygame.transform.flip(image, True, False)
-        self.player_walking_left.append(image)
-
-
-        self.image = self.player_walking_right[0]
+        self.image = self.player_walking_right[2]  # fram 3-6, aber hat index 0-2!
         self.rect = self.image.get_rect()
-
-        # self.rect = self.image.get_rect(topleft=(50, 50))
-        # self.holding = None
 
     def moving(self, x, y):
         self.rect.x += x
         self.rect.y += y
+        self.is_moving = True
 
     def update(self):
-        if self.direction == 'right':
-            self.image = self.player_walking_right[0]
-        if self.direction == 'left':
-            self.image = self.player_walking_left[0]
+        if self.is_moving:
+            frame = int((self.rect.x // 10) % 3)  # weil nur 3 frames vom spritesheet pro Richtung genutzt werden
+            if self.direction == 'right':
+                self.image = self.player_walking_right[frame]
+            if self.direction == 'left':
+                self.image = self.player_walking_left[frame]
+        else:  # if standing, dann soll es auch das richtige frame haben und die dazugehörige Richtung
+            if self.direction == 'right':
+                self.image = self.player_walking_right[2]
+            if self.direction == 'left':
+                self.image = self.player_walking_left[0]
+
+        self.is_moving = False
 
 
 def game(level):
@@ -79,17 +72,10 @@ def game(level):
     pygame.display.set_caption('Rescue Bunnies')
 
     bunny = Bunny()
-    #
-    # player_sprite_width = 50
-    # player_sprite_height = 60
-    #
-    # anims = {
-    #     'right': [(0, 0), (50, 0), (50, 0)],
-    #     'left': [(0, 0), (300, 0), (150, 0)],
-    # }
-    #
-    # player_spritesheet_data = (0, 0, 50, 60)
     player = Player()
+
+    if level == 1:
+        levels.Level1(player)
 
     player_sprite = pygame.sprite.Group()
     player_sprite.add(player)
@@ -102,19 +88,18 @@ def game(level):
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
-            player.moving(-1, 0)
+            player.direction = 'left'
+            player.moving(-5, 0)
         if keys[pygame.K_d]:
-            player.moving(1, 0)
+            player.direction = 'right'
+            player.moving(5, 0)
 
         player_sprite.update()
 
+        screen.fill((0, 0, 0))  # Bildschirm löschen
         player_sprite.draw(screen)
 
         pygame.display.flip()
         clock.tick(60)
 
     pygame.quit()
-
-
-if __name__ == '__main__':
-    game(1)
