@@ -1,21 +1,57 @@
-import pygame
+import pygame, random
 
 import levels
 from classes.spritesheet import SpriteSheet
 
-from classes.variables import WIDTH, HEIGHT
+from classes.variables import WIDTH, HEIGHT, BLACK
 
 
 class BunnyNPC(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('Assets/images/bunnyspriteNpc.png')
-        self.rect = self.image.get_rect(topleft=(50, 50))
-        self.caught = False
+        spritesheet = SpriteSheet('Assets/images/bunnyspriteNpc.png')
+        sprite_width = 54
+        sprite_height = 50
 
+        self.npc_walking_right = []
+        self.npc_walking_left = []
+
+        for i in range(2):
+            image = spritesheet.get_image(i * sprite_width, 0, sprite_width, sprite_height)
+            image.set_colorkey([255, 255, 255])
+            self.npc_walking_right.append(image)
+
+        for i in range(2):
+            image = pygame.transform.flip(spritesheet.get_image(i * sprite_width, 0, sprite_width, sprite_height), True, False)
+            image.set_colorkey([255, 255, 255])
+            self.npc_walking_left.append(image)
+
+        self.image = self.npc_walking_right[0]
+        self.rect = self.image.get_rect(topleft=(random.randint(0, WIDTH - sprite_width), 50))
+
+        self.direction = random.choice(['right', 'left'])
+        self.speed = random.randint(2, 7)
+
+    # def random_movement(self, npc):
+    #     for
+
+    # help for randomize movement of npc: https://www.geeksforgeeks.org/pygame-random-movement-of-object/
     def update(self):
-        if self.caught:
-            self.rect.x, self.rect.y = pygame.mouse.get_pos()
+        if self.direction == 'right':
+            self.rect.x += self.speed
+            self.image = self.npc_walking_right[0]
+            if self.rect.x > WIDTH:
+                self.direction = 'left'
+
+        else:
+            self.rect.x -= self.speed
+            self.image = self.npc_walking_left[0]
+            if self.rect.x < 0:
+                self.direction = 'right'
+
+
+        # self.is_moving = False
+
 
 
 
@@ -84,16 +120,16 @@ def game(level):
     ground_rect = ground.get_rect()
     ground_rect.y = HEIGHT - ground_rect.height
 
-    bunny = BunnyNPC()
+    npc_bunny = BunnyNPC()
     player = Player()
 
     player.rect.y = ground_rect.y - player.rect.height
-
-    # if level == 1:
-    #     levels.Level1(player)
-
     player_sprite = pygame.sprite.Group()
     player_sprite.add(player)
+
+    npc_bunny.rect.y = ground_rect.y - npc_bunny.rect.height
+    npc_bunny_sprite = pygame.sprite.Group()
+    npc_bunny_sprite.add(npc_bunny)
 
     running = True
     while running:
@@ -114,11 +150,13 @@ def game(level):
             return "start_menu"
 
         player_sprite.update()
+        npc_bunny_sprite.update()
 
         # screen.fill((0, 0, 0))  # Bildschirm löschen
         screen.blit(background, (0, 0))
         screen.blit(ground, ground_rect)
         player_sprite.draw(screen)
+        npc_bunny_sprite.draw(screen)
 
         screen.blit(quit_button, quit_button_rect.topleft)
 
