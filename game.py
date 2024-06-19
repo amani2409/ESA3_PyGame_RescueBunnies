@@ -30,23 +30,37 @@ class BunnyNPC(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(random.randint(0, WIDTH - sprite_width), 50))
 
         self.direction = random.choice(['right', 'left'])
-        self.speed = random.randint(2, 7)
+        self.speed = random.randint(2, 4)
+        self.frame = 0
+        self.frame_tmp = 0
+        self.frame_speed = 0.1
+
 
     # def random_movement(self, npc):
     #     for
 
     # help for randomize movement of npc: https://www.geeksforgeeks.org/pygame-random-movement-of-object/
     def update(self):
+        # frame = int((self.rect.x // 10) % 2)  # weil nur 3 frames vom spritesheet pro Richtung genutzt werden
+
         if self.direction == 'right':
             self.rect.x += self.speed
-            self.image = self.npc_walking_right[0]
-            if self.rect.x > WIDTH:
+            self.frame_tmp += self.frame_speed
+            if self.frame_tmp >= len(self.npc_walking_left):
+                self.frame_tmp = 0
+            self.frame = int(self.frame_tmp) % len(self.npc_walking_left)
+            self.image = self.npc_walking_left[self.frame]
+            if self.rect.x >= WIDTH:
                 self.direction = 'left'
 
         else:
             self.rect.x -= self.speed
-            self.image = self.npc_walking_left[0]
-            if self.rect.x < 0:
+            self.frame_tmp += self.frame_speed
+            if self.frame_tmp >= len(self.npc_walking_right):
+                self.frame_tmp = 0
+            self.frame = int(self.frame_tmp) % len(self.npc_walking_right)
+            self.image = self.npc_walking_right[self.frame]
+            if self.rect.x <= 0:
                 self.direction = 'right'
 
 
@@ -78,7 +92,7 @@ class Player(pygame.sprite.Sprite):
             image = spritesheet.get_image(i * sprite_width, 0, sprite_width, sprite_height)
             self.player_walking_left.append(image)
 
-        self.image = self.player_walking_right[2]  # fram 3-6, aber hat index 0-2!
+        self.image = self.player_walking_right[2]  # frame 3-6, aber hat index 0-2!
         self.rect = self.image.get_rect()
 
     def moving(self, x, y):
@@ -120,16 +134,17 @@ def game(level):
     ground_rect = ground.get_rect()
     ground_rect.y = HEIGHT - ground_rect.height
 
-    npc_bunny = BunnyNPC()
     player = Player()
 
     player.rect.y = ground_rect.y - player.rect.height
     player_sprite = pygame.sprite.Group()
     player_sprite.add(player)
 
-    npc_bunny.rect.y = ground_rect.y - npc_bunny.rect.height
     npc_bunny_sprite = pygame.sprite.Group()
-    npc_bunny_sprite.add(npc_bunny)
+    for i in range(5):
+        npc_bunny = BunnyNPC()
+        npc_bunny.rect.y = ground_rect.y - npc_bunny.rect.height
+        npc_bunny_sprite.add(npc_bunny)
 
     running = True
     while running:
