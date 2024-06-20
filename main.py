@@ -24,7 +24,7 @@ def main():
     # #A - Action
     # clock = pygame.time.Clock()
     # startScreen = StartScreen(screen)
-    displayScreen = "start_menu"
+    display_screen = "start_menu"
 
     keepGoing = True
     # L - Set up loop
@@ -37,35 +37,34 @@ def main():
                 quit()
 
         # keys = pygame.key.get_pressed()
-        # if displayScreen == "login":
+        # if display_screen == "login":
         keys = pygame.key.get_pressed()
 
-        if displayScreen == 'start_menu':
+        if display_screen == 'start_menu':
             draw_startScreen()
             if keys[pygame.K_s]:
-                displayScreen = 'game'
+                display_screen = 'game'
                 game_over = False
-                game(level=1)
+                game(1)
             if keys[pygame.K_q]:
-                displayScreen = 'exit'
+                display_screen = 'exit'
                 pygame.quit()
                 quit()
 
         elif keys[pygame.K_ESCAPE]:
             # running = False
-            displayScreen = "start_menu"
+            display_screen = "start_menu"
 
-
-        elif displayScreen == 'endScreen':
+        elif display_screen == 'endScreen':
             draw_endScreen()
             keys = pygame.key.get_pressed()
             if keys[pygame.K_r]:
-                displayScreen = 'game'
-                game(level=1)
+                display_screen = 'game'
+                game(1)
             if keys[pygame.K_h]:
-                displayScreen = "start_menu"
+                display_screen = "start_menu"
             if keys[pygame.K_q]:
-                displayScreen = "exit"
+                display_screen = "exit"
             pygame.quit()
             quit()
 

@@ -1,8 +1,5 @@
 import pygame
 
-from classes import variables
-from classes.variables import WIDTH, HEIGHT, BLACK, WHITE
-
 
 # help with sprite from http://programarcadegames.com/python_examples/en/sprite_sheets/
 class SpriteSheet(object):
