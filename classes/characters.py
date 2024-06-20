@@ -34,30 +34,30 @@ class BunnyNPC(pygame.sprite.Sprite):
         self.frame = 0
         self.frame_tmp = 0
         self.frame_speed = 0.1
+        self.is_catched = False
 
     # help for randomize movement of npc: https://www.geeksforgeeks.org/pygame-random-movement-of-object/
     def update(self):
-        # frame = int((self.rect.x // 10) % 2)  # weil nur 3 frames vom spritesheet pro Richtung genutzt werden
+        if not self.is_catched:
+            if self.direction == 'right':
+                self.rect.x += self.speed
+                self.frame_tmp += self.frame_speed
+                if self.frame_tmp >= len(self.npc_walking_left):
+                    self.frame_tmp = 0
+                self.frame = int(self.frame_tmp) % len(self.npc_walking_left)
+                self.image = self.npc_walking_left[self.frame]
+                if self.rect.x >= WIDTH:
+                    self.direction = 'left'
 
-        if self.direction == 'right':
-            self.rect.x += self.speed
-            self.frame_tmp += self.frame_speed
-            if self.frame_tmp >= len(self.npc_walking_left):
-                self.frame_tmp = 0
-            self.frame = int(self.frame_tmp) % len(self.npc_walking_left)
-            self.image = self.npc_walking_left[self.frame]
-            if self.rect.x >= WIDTH:
-                self.direction = 'left'
-
-        else:
-            self.rect.x -= self.speed
-            self.frame_tmp += self.frame_speed
-            if self.frame_tmp >= len(self.npc_walking_right):
-                self.frame_tmp = 0
-            self.frame = int(self.frame_tmp) % len(self.npc_walking_right)
-            self.image = self.npc_walking_right[self.frame]
-            if self.rect.x <= 0:
-                self.direction = 'right'
+            else:
+                self.rect.x -= self.speed
+                self.frame_tmp += self.frame_speed
+                if self.frame_tmp >= len(self.npc_walking_right):
+                    self.frame_tmp = 0
+                self.frame = int(self.frame_tmp) % len(self.npc_walking_right)
+                self.image = self.npc_walking_right[self.frame]
+                if self.rect.x <= 0:
+                    self.direction = 'right'
 
         # self.is_moving = False
 
@@ -88,6 +88,8 @@ class Player(pygame.sprite.Sprite):
         self.image = self.player_walking_right[2]  # frame 3-6, aber hat index 0-2!
         self.rect = self.image.get_rect()
 
+        self.catched_bunny = None
+
     def moving(self, x, y):
         self.rect.x += x
         self.rect.y += y
@@ -107,3 +109,20 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.player_walking_left[0]
 
         self.is_moving = False
+
+    def catch_release(self, npc_bunny):
+        keys = pygame.key.get_pressed()
+
+        if self.catched_bunny is None and keys[pygame.K_s]:  # if no bunny is catched already, because can only catch one!
+            collide = pygame.sprite.spritecollide(self, npc_bunny, False)  # no kill because need to release
+
+            for i in collide:
+                if not i.is_catched:
+                    self.catched_bunny = i
+                    self.catched_bunny.is_catched = True
+                    npc_bunny.remove(i)  # its only removing from group but doesnt kill
+                    break  # because only 1 bunny to catch
+
+        elif self.catched_bunny is not None and keys[pygame.K_w]:
+            self.catched_bunny.is_catched = False
+            self.catched_bunny = None
