@@ -3,6 +3,8 @@ import sys
 import pygame
 
 from classes.variables import WIDTH, HEIGHT
+
+
 # from functions import Button
 
 # def StartScreen(login_mask=None):
@@ -20,20 +22,23 @@ from classes.variables import WIDTH, HEIGHT
 # https://www.makeuseof.com/start-menu-and-game-over-screen-with-pygame/
 def draw_startScreen():
     background = pygame.image.load('Assets/images/background.png')
-    screen = pygame.display.set_mode((800, 600))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption('Start Menu')
     font = pygame.font.SysFont('Arial', 50)
     title = font.render('Hallo', True, (255, 255, 255))
     start_button = font.render('Start [s]', True, (255, 255, 255))
     quit_button = font.render('Quit [q]', True, (255, 255, 255))
-    screen.blit(background, (0, 0))
+    screen.blit(background, (0, 0))  # blit wird genutzt um eine Sache auf einen andere Sache/Oberfläche zu zeichnen
     screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 3 - title.get_height() / 2))
     screen.blit(start_button, (WIDTH / 2 - start_button.get_width() / 2, HEIGHT / 2 - start_button.get_height() / 2))
-    screen.blit(quit_button,(WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 2 + start_button.get_height()))
+    screen.blit(quit_button, (WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 2 + start_button.get_height()))
     pygame.display.update()
+
 
 def draw_endScreen():
     background = pygame.image.load('Assets/images/background.png')
-    screen = pygame.display.set_mode((800, 600))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption('End Screen')
     font = pygame.font.SysFont('Arial', 50)
     title = font.render('GameOver', True, (255, 255, 255))
     restart_button = font.render('Restart [r]', True, (255, 255, 255))
@@ -41,18 +46,16 @@ def draw_endScreen():
     quit_button = font.render('Quit [q]', True, (255, 255, 255))
     screen.blit(background, (0, 0))
     screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 4 - title.get_height() / 2))
-    screen.blit(restart_button, (WIDTH / 2 - restart_button.get_width() / 2, HEIGHT / 2 - restart_button.get_height() / 2))
-    screen.blit(home_button,(WIDTH / 2 - home_button.get_width() / 2, HEIGHT / 2 + restart_button.get_height()))
-    screen.blit(quit_button,(WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 4 + restart_button.get_height()))
+    screen.blit(restart_button,
+                (WIDTH / 2 - restart_button.get_width() / 2, HEIGHT / 2 - restart_button.get_height() / 2))
+    screen.blit(home_button, (WIDTH / 2 - home_button.get_width() / 2, HEIGHT / 2 + restart_button.get_height()))
+    screen.blit(quit_button, (WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 4 + restart_button.get_height()))
     pygame.display.update()
 
 
 def draw_login_mask():
     pygame.display.update()
-
-
-
-
+    pygame.display.set_caption('Login')
 
 # def level_screen():
 #     for i in range(0, 20):
