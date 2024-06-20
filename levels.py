@@ -11,6 +11,8 @@ class Level:
         self.background = None
         self.ground = None
         self.ground_rect = None
+        self.house = None
+        self.house_rect = None
         self.player_sprite = pygame.sprite.Group()
         self.npc_bunny_sprite = pygame.sprite.Group()
 
@@ -19,6 +21,7 @@ class Level:
     def draw(self, screen):
         screen.blit(self.background, (0, 0))
         screen.blit(self.ground, self.ground_rect)
+        screen.blit(self.house, self.house_rect)
         self.npc_bunny_sprite.draw(screen)
         self.player_sprite.draw(screen)
 
@@ -33,9 +36,14 @@ class Level1(Level):
         self.background = pygame.image.load('Assets/images/background.png')
         self.ground = pygame.image.load('Assets/images/ground.png')
         self.ground = pygame.transform.scale(self.ground, (WIDTH, self.ground.get_height()))
-
         self.ground_rect = self.ground.get_rect()
         self.ground_rect.y = HEIGHT - self.ground_rect.height
+
+        self.house = pygame.image.load('Assets/images/tiny-house.png')
+        self.house = pygame.transform.scale(self.house, (80, 60))
+        self.house_rect = self.house.get_rect()
+        self.house_rect.y = self.ground_rect.y - self.house_rect.height
+        self.house_rect.x = WIDTH - self.house_rect.width
 
         self.player = Player()
 
