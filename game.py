@@ -14,7 +14,6 @@ def game(level_nr):
     quit_button = font.render('Quit [Esc]', True, (255, 255, 255))
     quit_button_rect = quit_button.get_rect(topright=(WIDTH - 10, 10))
 
-
     # http://programarcadegames.com/python_examples/en/sprite_sheets/
     level_list = [Level1, Level2]
     level = level_list[level_nr - 1]()
@@ -24,8 +23,8 @@ def game(level_nr):
     # for i in range(level_count):
     #     level_list.append(level.Level.__str__(i))
 
-    current_level = 0  # later get number of the logged user
-    current_level = level_list[current_level]
+    # current_level = 0  # later get number of the logged user
+    # current_level = level_list[current_level]
 
     player = level.player
     player_sprite = pygame.sprite.Group(player)
@@ -48,13 +47,18 @@ def game(level_nr):
         if keys[pygame.K_ESCAPE]:
             return "start_menu"
 
+        player.catch_release(npc_bunny_sprite, level.house_rect)
+
         player_sprite.update()
-        npc_bunny_sprite.update()
+        npc_bunny_sprite.update(player)
 
         screen.fill((0, 0, 0))  # Bildschirm löschen
         level.draw(screen)
         screen.blit(quit_button, quit_button_rect.topleft)
         screen.blit(text_level, text_level.get_rect(topleft=(10, 10)))
+
+        player_sprite.draw(screen)
+        npc_bunny_sprite.draw(screen)
 
         pygame.display.flip()
         clock.tick(60)
