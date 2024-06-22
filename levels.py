@@ -16,6 +16,8 @@ class Level:
         self.player_sprite = pygame.sprite.Group()
         self.npc_bunny_sprite = pygame.sprite.Group()
 
+        self.time_limit = 0
+
         # self.world_shift = 0
 
     def draw(self, screen):
@@ -32,6 +34,8 @@ class Level:
 class Level1(Level):
     def __init__(self):
         super().__init__()
+
+        self.time_limit = 10
 
         self.background = pygame.image.load('Assets/images/background.png')
         self.ground = pygame.image.load('Assets/images/ground.png')
@@ -60,6 +64,8 @@ class Level1(Level):
 class Level2(Level):
     def __init__(self):
         super().__init__()
+
+        self.time_limit = 30
 
         self.background = pygame.image.load('Assets/images/background.png')
         self.ground = pygame.image.load('Assets/images/ground.png')
