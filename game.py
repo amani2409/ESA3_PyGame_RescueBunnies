@@ -30,6 +30,8 @@ def game(level_nr):
     player_sprite = pygame.sprite.Group(player)
     npc_bunny_sprite = level.npc_bunny_sprite
 
+    all_bunnies = len(npc_bunny_sprite.sprites())
+
     running = True
     while running:
         for event in pygame.event.get():
@@ -55,7 +57,11 @@ def game(level_nr):
         screen.fill((0, 0, 0))  # Bildschirm löschen
         level.draw(screen)
         screen.blit(quit_button, quit_button_rect.topleft)
-        screen.blit(text_level, text_level.get_rect(topleft=(10, 10)))
+        text_level_rect = text_level.get_rect(topleft=(10, 10))
+        screen.blit(text_level, text_level_rect)
+
+        catched_bunnies_text = font.render(f'{player.count_catched_bunny}/{all_bunnies} Bunnies', True, (255, 255, 255))
+        screen.blit(catched_bunnies_text, catched_bunnies_text.get_rect(topleft=(10, text_level_rect.bottom + 10)))
 
         player_sprite.draw(screen)
         npc_bunny_sprite.draw(screen)
