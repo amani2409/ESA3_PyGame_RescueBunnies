@@ -2,6 +2,12 @@ import pygame, random
 from levels import *
 from classes.spritesheet import SpriteSheet
 from classes.variables import WIDTH, HEIGHT, BLACK
+from screen import draw_endScreen
+
+
+def draw_timer(screen, time, font):
+    timer_text = font.render(str(time), True, (255, 255, 255))
+    screen.blit(timer_text, timer_text.get_rect(midtop=(WIDTH // 2, 20)))
 
 
 def game(level_nr):
@@ -32,11 +38,24 @@ def game(level_nr):
 
     all_bunnies = len(npc_bunny_sprite.sprites())
 
+    time_limit = level.time_limit
+    timer = pygame.USEREVENT + 1
+    pygame.time.set_timer(timer, 1000)
+
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
+            # https://www.reddit.com/r/pygame/comments/enougf/adding_a_countdown_timer_to_a_game/
+            elif event.type == timer:
+                time_limit -= 1
+                if time_limit <= 0:
+                    draw_endScreen()
+                    pygame.display.flip()
+                # else:
+                #     pygame.time.set_timer(timer, 0)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -59,6 +78,8 @@ def game(level_nr):
         screen.blit(quit_button, quit_button_rect.topleft)
         text_level_rect = text_level.get_rect(topleft=(10, 10))
         screen.blit(text_level, text_level_rect)
+
+        draw_timer(screen, time_limit, font)
 
         catched_bunnies_text = font.render(f'{player.count_catched_bunny}/{all_bunnies} Bunnies', True, (255, 255, 255))
         screen.blit(catched_bunnies_text, catched_bunnies_text.get_rect(topleft=(10, text_level_rect.bottom + 10)))
