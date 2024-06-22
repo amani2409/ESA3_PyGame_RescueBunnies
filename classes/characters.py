@@ -2,7 +2,7 @@ import pygame
 import random
 
 from classes.spritesheet import SpriteSheet
-from classes.variables import WIDTH
+from classes.variables import WIDTH, HEIGHT
 
 
 class BunnyNPC(pygame.sprite.Sprite):
@@ -35,11 +35,13 @@ class BunnyNPC(pygame.sprite.Sprite):
         self.frame_tmp = 0
         self.frame_speed = 0.1
         self.is_catched = False
+        # self.pos = random.randint(0, WIDTH - sprite_width)
 
     # help for randomize movement of npc: https://www.geeksforgeeks.org/pygame-random-movement-of-object/
-    def update(self):
+    def update(self, player=None):
         if not self.is_catched:
             if self.direction == 'right':
+                # self.rect.x = self.pos
                 self.rect.x += self.speed
                 self.frame_tmp += self.frame_speed
                 if self.frame_tmp >= len(self.npc_walking_left):
@@ -59,7 +61,16 @@ class BunnyNPC(pygame.sprite.Sprite):
                 if self.rect.x <= 0:
                     self.direction = 'right'
 
+        else:
+            self.carried_npc(player)
+
         # self.is_moving = False
+
+    def carried_npc(self, player):
+        if player is not None and player.rect is not None:
+            # dx, dy = player.rect.x, player.rect.y
+            self.rect.x = player.rect.x + player.rect.width // 2 - self.rect.width // 2
+            self.rect.y = player.rect.y + player.rect.height // 2 - self.rect.height // 2
 
 
 class Player(pygame.sprite.Sprite):
@@ -89,6 +100,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         self.catched_bunny = None
+        self.count_catched_bunny = 0
 
     def moving(self, x, y):
         self.rect.x += x
@@ -110,19 +122,22 @@ class Player(pygame.sprite.Sprite):
 
         self.is_moving = False
 
-    def catch_release(self, npc_bunny):
+    def catch_release(self, npc_bunny, house):
         keys = pygame.key.get_pressed()
 
         if self.catched_bunny is None and keys[pygame.K_s]:  # if no bunny is catched already, because can only catch one!
             collide = pygame.sprite.spritecollide(self, npc_bunny, False)  # no kill because need to release
 
-            for i in collide:
-                if not i.is_catched:
-                    self.catched_bunny = i
-                    self.catched_bunny.is_catched = True
-                    npc_bunny.remove(i)  # its only removing from group but doesnt kill
-                    break  # because only 1 bunny to catch
+            for bunny in collide:
+                self.catched_bunny = bunny
+                self.catched_bunny.is_catched = True
+                self.catched_bunny.carried_npc(bunny)
+                break  # because only 1 bunny to catch
 
-        elif self.catched_bunny is not None and keys[pygame.K_w]:
-            self.catched_bunny.is_catched = False
+        elif self.catched_bunny is not None and self.catched_bunny.is_catched and keys[pygame.K_w]:
+            if house.collidepoint(self.rect.center):
+                self.catched_bunny.kill()
+                self.count_catched_bunny += 1
+            else:
+                self.catched_bunny.is_catched = False
             self.catched_bunny = None
