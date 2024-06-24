@@ -43,6 +43,9 @@ class BunnyNPC(pygame.sprite.Sprite):
             if self.direction == 'right':
                 # self.rect.x = self.pos
                 self.rect.x += self.speed
+                if self.rect.right > WIDTH:
+                    self.rect.right = WIDTH
+                    self.direction = 'left'
                 self.frame_tmp += self.frame_speed
                 if self.frame_tmp >= len(self.npc_walking_left):
                     self.frame_tmp = 0
@@ -53,6 +56,9 @@ class BunnyNPC(pygame.sprite.Sprite):
 
             else:
                 self.rect.x -= self.speed
+                if self.rect.left < 0:
+                    self.rect.left = 0
+                    self.direction = 'right'
                 self.frame_tmp += self.frame_speed
                 if self.frame_tmp >= len(self.npc_walking_right):
                     self.frame_tmp = 0
@@ -106,6 +112,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += x
         self.rect.y += y
         self.is_moving = True
+
+        # for not moving beyond the window
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
 
     def update(self):
         if self.is_moving:
