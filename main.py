@@ -32,10 +32,10 @@ def main():
     while keepGoing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                keepGoing = False
                 pygame.quit()
                 quit()
 
-        # keys = pygame.key.get_pressed()
         # if display_screen == "login":
         keys = pygame.key.get_pressed()
 
@@ -43,29 +43,36 @@ def main():
             draw_startScreen()
             if keys[pygame.K_s]:
                 display_screen = 'game'
-                game_over = False
-                game(1)
+                # game_over = False
+                screen_result = game(1)
+                if screen_result == 'end_screen':
+                    display_screen = 'end_screen'
+                elif screen_result == 'start_menu':
+                    display_screen = 'start_menu'
             if keys[pygame.K_q]:
-                display_screen = 'exit'
+                keepGoing = False
                 pygame.quit()
                 quit()
 
-        elif keys[pygame.K_ESCAPE]:
+        elif display_screen == 'game':
             # running = False
-            display_screen = "start_menu"
+            screen_result = game(1)
+            if screen_result == 'end_screen':
+                display_screen = 'end_screen'
+            elif screen_result == 'start_menu':
+                display_screen = 'start_menu'
 
-        elif display_screen == 'endScreen':
-            draw_endScreen()
-            keys = pygame.key.get_pressed()
+        elif display_screen == 'end_screen':
+            screen_result = draw_endScreen()
             if keys[pygame.K_r]:
                 display_screen = 'game'
-                game(1)
             if keys[pygame.K_h]:
-                display_screen = "start_menu"
+                display_screen = 'start_menu'
             if keys[pygame.K_q]:
-                display_screen = "exit"
-            pygame.quit()
-            quit()
+                display_screen = 'exit'
+                keepGoing = False
+                pygame.quit()
+                quit()
 
         pygame.display.flip()
         # clock.tick(60)

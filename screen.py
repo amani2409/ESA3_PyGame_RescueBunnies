@@ -53,6 +53,27 @@ def draw_endScreen():
     pygame.display.update()
 
 
+def draw_nextLevel():
+    background = pygame.image.load('Assets/images/background.png')
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption('Winning Screen')
+    font = pygame.font.SysFont('Arial', 50)
+    title = font.render('Won: You made it!', True, (255, 255, 255))
+    restart_button = font.render('Restart [r]', True, (255, 255, 255))
+    next_button = font.render('next Level [n]', True, (255, 255, 255))
+    home_button = font.render('Home Screen [h]', True, (255, 255, 255))
+    quit_button = font.render('Quit [q]', True, (255, 255, 255))
+    screen.blit(background, (0, 0))
+    screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 4 - title.get_height() / 2))
+    screen.blit(restart_button,
+                (WIDTH / 2 - restart_button.get_width() / 2, HEIGHT / 2 - restart_button.get_height() / 2))
+    screen.blit(home_button, (WIDTH / 2 - home_button.get_width() / 2, HEIGHT / 2 + restart_button.get_height()))
+    screen.blit(next_button, (WIDTH / 2 - next_button.get_width() / 2, HEIGHT / 4 + restart_button.get_height()))
+    screen.blit(quit_button, (WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 6 + restart_button.get_height()))
+    pygame.display.update()
+
+
+
 def draw_login_mask():
     pygame.display.update()
     pygame.display.set_caption('Login')
