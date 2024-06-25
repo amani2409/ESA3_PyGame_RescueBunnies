@@ -52,8 +52,7 @@ def game(level_nr):
             elif event.type == timer:
                 time_limit -= 1
                 if time_limit <= 0:
-                    draw_endScreen()
-                    pygame.display.flip()
+                    return "end_screen"
                 # else:
                 #     pygame.time.set_timer(timer, 0)
 
