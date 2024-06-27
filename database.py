@@ -86,7 +86,7 @@ def get_level(username):
 def show_all_user_highscore():
     conn = connect()
     cursor = conn.cursor()
-    cursor.execute('SELECT username, highscore FROM users ORDER BY highscore DESC LIMIT 20')
+    cursor.execute('SELECT username, highscore FROM users ORDER BY highscore DESC LIMIT 10')
     highscores = cursor.fetchall()
     conn.close()
     return highscores
