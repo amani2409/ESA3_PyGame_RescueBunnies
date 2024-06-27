@@ -35,7 +35,7 @@ def main():
                 display_screen = 'start_menu'
         elif display_screen == 'start_menu':
             if user_data:
-                draw_startScreen(user_data['username'])
+                draw_startScreen(user_data)
             if keys[pygame.K_s]:
                 display_screen = 'game'
                 # game_over = False
@@ -76,10 +76,9 @@ def main():
             if keys[pygame.K_h]:
                 display_screen = 'start_menu'
             if keys[pygame.K_q]:
-                display_screen = 'exit'
                 keepGoing = False
-                pygame.quit()
-                quit()
+                # pygame.quit()
+                # quit()
 
         pygame.display.flip()
         # clock.tick(60)
