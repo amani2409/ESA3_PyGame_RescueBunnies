@@ -30,7 +30,7 @@ def add_user(username, password):
     user_exists = cursor.fetchone()
     if not user_exists:
         # print(f'User {username} already exists or password wrong')
-    # else:
+        # else:
         cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
         conn.commit()
     conn.close()
@@ -52,11 +52,13 @@ def get_user(username, password):
     else:
         return None
 
+
 def update_highscore(username, score):
     conn = connect()
     cursor = conn.cursor()
     cursor.execute('UPDATE users SET highscore = ? WHERE username = ?', (score, username))
     conn.commit()
+
 
 def get_highscore(username):
     conn = connect()
@@ -64,6 +66,7 @@ def get_highscore(username):
     cursor.execute('SELECT highscore FROM where username = ?', (username))
     highscore = cursor.fetchone()
     return highscore[0]
+
 
 def update_level(username, level):
     conn = connect()
@@ -78,3 +81,12 @@ def get_level(username):
     cursor.execute('SELECT currentlevel FROM where username = ? ', (username))
     currentlevel = cursor.fetchone()
     return currentlevel[0]
+
+
+def show_all_user_highscore():
+    conn = connect()
+    cursor = conn.cursor()
+    cursor.execute('SELECT username, highscore FROM users ORDER BY highscore DESC LIMIT 20')
+    highscores = cursor.fetchall()
+    conn.close()
+    return highscores
