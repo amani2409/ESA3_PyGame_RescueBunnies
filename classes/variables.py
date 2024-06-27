@@ -1,6 +1,6 @@
 WIDTH = 1000
 HEIGHT = 600
 
-WHITE = (154, 164, 166)
+WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 

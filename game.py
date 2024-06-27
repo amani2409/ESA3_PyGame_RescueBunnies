@@ -90,3 +90,6 @@ def game(level_nr):
         clock.tick(60)
 
     pygame.quit()
+    score = 0
+    new_level = level_nr + 1
+    return screen, score, new_level
