@@ -2,7 +2,8 @@ import pygame, random
 from levels import *
 from classes.spritesheet import SpriteSheet
 from classes.variables import WIDTH, HEIGHT, BLACK
-from screen import draw_endScreen
+from screen import draw_endScreen, draw_nextLevel
+from database import update_highscore, update_level
 
 
 def draw_timer(screen, time, font):
@@ -10,12 +11,13 @@ def draw_timer(screen, time, font):
     screen.blit(timer_text, timer_text.get_rect(midtop=(WIDTH // 2, 20)))
 
 
-def game(level_nr):
+def game(user_data):
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
     pygame.display.set_caption('Rescue Bunnies')
 
+    level_nr = user_data['currentlevel']
     font = pygame.font.SysFont('Arial', 20)
     quit_button = font.render('Quit [Esc]', True, (255, 255, 255))
     quit_button_rect = quit_button.get_rect(topright=(WIDTH - 10, 10))
@@ -55,6 +57,13 @@ def game(level_nr):
                 time_limit -= 1
                 if time_limit <= 0:
                     return 'end_screen', score, level_nr
+                # if time_limit >= 0:
+                #     if player.count_catched_bunny == all_bunnies:
+                #         score = time_limit
+                #         update_highscore(user_data['username'], user_data['highscore'] + score)
+                #         update_level(user_data['username'], user_data['currentlevel'] + 1)
+                #         draw_nextLevel()
+                #         return 'next_level', score, level_nr
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -66,6 +75,11 @@ def game(level_nr):
 
         if keys[pygame.K_ESCAPE]:
             return 'start_menu', score, level_nr
+
+        # if player.count_catched_bunny == all_bunnies:
+        #     update_highscore(user_data['username'], user_data['highscore'])
+        #     update_level(user_data['username'], user_data['currentlevel'])
+        #     draw_nextLevel()
 
         player.catch_release(npc_bunny_sprite, level.house_rect)
 
@@ -89,5 +103,13 @@ def game(level_nr):
         pygame.display.flip()
         clock.tick(60)
 
+        if player.count_catched_bunny == all_bunnies:
+            score = time_limit
+            update_highscore(user_data['username'], user_data['highscore'] + score)
+            update_level(user_data['username'], user_data['currentlevel'] + 1)
+            draw_nextLevel()
+            return 'next_level', score, level_nr
+
+
     new_level = level_nr + 1
-    return 'start_menu', score, new_level
+    return 'next_level', score, new_level

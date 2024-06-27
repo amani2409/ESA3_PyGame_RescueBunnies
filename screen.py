@@ -1,7 +1,7 @@
 import pygame
 
 from classes.variables import WIDTH, HEIGHT, WHITE
-from database import get_user, add_user
+from database import get_user, add_user, show_all_user_highscore
 
 
 # https://www.makeuseof.com/start-menu-and-game-over-screen-with-pygame/
@@ -15,15 +15,42 @@ def draw_startScreen(user_data):
     font = pygame.font.SysFont('Arial', 50)
     title = font.render(f'Hallo {user_data['username']}', True, (255, 255, 255))
     highscore = font.render(f'Highscore: {user_data['highscore']}', True, (255, 255, 255))
+    all_highscore = font.render('Show all Highscore [h]', True, (255, 255, 255))
     start_button = font.render('Start [s]', True, (255, 255, 255))
     quit_button = font.render('Quit [q]', True, (255, 255, 255))
     screen.blit(background, (0, 0))  # blit wird genutzt um eine Sache auf einen andere Sache/Oberfläche zu zeichnen
     screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 3 - title.get_height() / 2))
     screen.blit(highscore, (WIDTH / 2 - highscore.get_width() / 2, HEIGHT / highscore.get_height() / 2))
     screen.blit(start_button, (WIDTH / 2 - start_button.get_width() / 2, HEIGHT / 2 - start_button.get_height() / 2))
-    screen.blit(quit_button, (WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 2 + start_button.get_height()))
+    screen.blit(all_highscore, (WIDTH / 2 - all_highscore.get_width() / 2, HEIGHT / 2 + start_button.get_height() / 2))
+    screen.blit(quit_button, (WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 4 + start_button.get_height()))
     pygame.display.update()
 
+
+def draw_highscore_screen():
+    background = pygame.image.load('Assets/images/start.png')
+    background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+    screen = pygame.display.get_surface()
+    screen.fill((0, 0, 0))
+    screen.blit(background, (0, 0))
+
+    pygame.display.set_caption('Highscore')
+    font = pygame.font.SysFont('Arial', 50)
+
+    all_highscores = show_all_user_highscore()
+
+    dis = 100
+    for i, data in enumerate(all_highscores):
+        text = f'{i + 1}. {data[0]}: {data[1]}'
+        text_surface = font.render(text, True, WHITE)
+        screen.blit(text_surface, (WIDTH / 2 - text_surface.get_width() / 2, dis))
+        dis += 50
+
+    back_button = font.render('Back [b]', True, WHITE)
+    back_button_rect = back_button.get_rect(topright=(WIDTH - 10, 10))
+    screen.blit(back_button, back_button_rect.topleft)
+
+    pygame.display.update()
 
 def draw_endScreen():
     background = pygame.image.load('Assets/images/lostscene.png')
