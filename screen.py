@@ -1,29 +1,16 @@
 import pygame
-import sys
 
 from classes.variables import WIDTH, HEIGHT, WHITE
 from database import get_user, add_user
 
 
-# from functions import Button
-
-# def StartScreen(login_mask=None):
-# def __init__(self, screen):
-#     self.screen = screen
-#     self.font = pygame.font.SysFont('Arial', 50)
-#
-#     self.player_name = ''
-#     self.levels = [1, 2]  # Adding levels
-#     self.playing_level = 1
-#
-#     Button(color=(255, 0, 0), x=60, y=60, width=80, height=100, text='START', fontsize=20, hover_color=(0, 255, 0),
-#            font=pygame.font.init(), fontcolor=(0, 0, 0))
-
 # https://www.makeuseof.com/start-menu-and-game-over-screen-with-pygame/
 def draw_startScreen(user_data):
     background = pygame.image.load('Assets/images/start.png')
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.get_surface()
+    screen.fill((0, 0, 0))
+
     pygame.display.set_caption('Start Menu')
     font = pygame.font.SysFont('Arial', 50)
     title = font.render(f'Hallo {user_data}', True, (255, 255, 255))
@@ -39,7 +26,8 @@ def draw_startScreen(user_data):
 def draw_endScreen():
     background = pygame.image.load('Assets/images/lostscene.png')
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.get_surface()
+    screen.fill((0, 0, 0))
     pygame.display.set_caption('End Screen')
     font = pygame.font.SysFont('Arial', 50)
     title = font.render('GameOver', True, (255, 255, 255))
@@ -57,7 +45,10 @@ def draw_endScreen():
 
 def draw_nextLevel():
     background = pygame.image.load('Assets/images/background.png')
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+    screen = pygame.display.get_surface()
+    screen.fill((0, 0, 0))
+
     pygame.display.set_caption('Winning Screen')
     font = pygame.font.SysFont('Arial', 50)
     title = font.render('Won: You made it!', True, (255, 255, 255))
@@ -133,10 +124,13 @@ def draw_loginScreen():
                     if event.key == pygame.K_RETURN:
                         user_data = get_user(username, password)
                         if user_data:
-                            error_message = 'Username in use. Choose a different username'
-                        else:
-                            add_user(username, password)
-                            user_data = get_user(username, password)
+                        #     if user_data['password'] == password:
+                        #         running = False
+                        #     else:
+                        #         error_message = 'Password is wrong. Please try again.'
+                        # else:
+                        #     add_user(username, password)
+                        #     user_data = get_user(username, password)
                             running = False
 
         screen.fill((30, 30, 30))
@@ -166,4 +160,8 @@ def draw_loginScreen():
             screen.blit(error_label, (WIDTH / 2 - error_label.get_width() / 2, input_passwort.y + input_passwort.height + 60))
 
         pygame.display.flip()
-    return {'username': username, 'password': password, 'highscore': user_data[3], 'currentlevel': user_data[4]}
+
+    if not user_data:
+        user_data = {'username': username, 'password': password, 'highscore': user_data[3], 'currentlevel': user_data[4]}
+
+    return user_data
