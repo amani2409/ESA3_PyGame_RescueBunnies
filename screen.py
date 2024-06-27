@@ -36,6 +36,9 @@ def draw_highscore_screen():
 
     pygame.display.set_caption('Highscore')
     font = pygame.font.SysFont('Arial', 50)
+    title = font.render('Highscores Top 10', True, WHITE)
+    title_rect = title.get_rect(center=(WIDTH / 2, 50))
+    screen.blit(title, title_rect)
 
     all_highscores = show_all_user_highscore()
 
