@@ -35,7 +35,7 @@ class Level1(Level):
     def __init__(self):
         super().__init__()
 
-        self.time_limit = 10
+        self.time_limit = 5
 
         self.background = pygame.image.load('Assets/images/background.png')
         self.ground = pygame.image.load('Assets/images/ground.png')
