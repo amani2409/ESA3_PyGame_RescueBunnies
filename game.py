@@ -32,6 +32,8 @@ def game(level_nr):
     # current_level = 0  # later get number of the logged user
     # current_level = level_list[current_level]
 
+    score = 0
+
     player = level.player
     player_sprite = pygame.sprite.Group(player)
     npc_bunny_sprite = level.npc_bunny_sprite
@@ -52,9 +54,7 @@ def game(level_nr):
             elif event.type == timer:
                 time_limit -= 1
                 if time_limit <= 0:
-                    return "end_screen"
-                # else:
-                #     pygame.time.set_timer(timer, 0)
+                    return 'end_screen', score, level_nr
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -65,14 +65,14 @@ def game(level_nr):
             player.moving(5, 0)
 
         if keys[pygame.K_ESCAPE]:
-            return "start_menu"
+            return 'start_menu', score, level_nr
 
         player.catch_release(npc_bunny_sprite, level.house_rect)
 
         player_sprite.update()
         npc_bunny_sprite.update(player)
-
-        screen.fill((0, 0, 0))  # Bildschirm löschen
+        screen = pygame.display.get_surface()
+        screen.fill((0, 0, 0))
         level.draw(screen)
         screen.blit(quit_button, quit_button_rect.topleft)
         text_level_rect = text_level.get_rect(topleft=(10, 10))
@@ -89,7 +89,5 @@ def game(level_nr):
         pygame.display.flip()
         clock.tick(60)
 
-    pygame.quit()
-    score = 0
     new_level = level_nr + 1
-    return screen, score, new_level
+    return 'start_menu', score, new_level

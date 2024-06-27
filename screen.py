@@ -13,11 +13,13 @@ def draw_startScreen(user_data):
 
     pygame.display.set_caption('Start Menu')
     font = pygame.font.SysFont('Arial', 50)
-    title = font.render(f'Hallo {user_data}', True, (255, 255, 255))
+    title = font.render(f'Hallo {user_data['username']}', True, (255, 255, 255))
+    highscore = font.render(f'Highscore: {user_data['highscore']}', True, (255, 255, 255))
     start_button = font.render('Start [s]', True, (255, 255, 255))
     quit_button = font.render('Quit [q]', True, (255, 255, 255))
     screen.blit(background, (0, 0))  # blit wird genutzt um eine Sache auf einen andere Sache/Oberfläche zu zeichnen
     screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 3 - title.get_height() / 2))
+    screen.blit(highscore, (WIDTH / 2 - highscore.get_width() / 2, HEIGHT / highscore.get_height() / 2))
     screen.blit(start_button, (WIDTH / 2 - start_button.get_width() / 2, HEIGHT / 2 - start_button.get_height() / 2))
     screen.blit(quit_button, (WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 2 + start_button.get_height()))
     pygame.display.update()
@@ -124,14 +126,17 @@ def draw_loginScreen():
                     if event.key == pygame.K_RETURN:
                         user_data = get_user(username, password)
                         if user_data:
-                        #     if user_data['password'] == password:
-                        #         running = False
-                        #     else:
-                        #         error_message = 'Password is wrong. Please try again.'
-                        # else:
-                        #     add_user(username, password)
-                        #     user_data = get_user(username, password)
-                            running = False
+                            if user_data['password'] == password:
+                                running = False
+                        else:
+                            add_user(username, password)
+                            user_data = get_user(username, password)
+                            if user_data:
+                                running = False
+                            else:
+                                error_message = f'Password is incorrect for user {username}'
+                                username = ''
+                                password = ''
 
         screen.fill((30, 30, 30))
         screen.blit(background, (0, 0))
@@ -157,11 +162,9 @@ def draw_loginScreen():
 
         if error_message:
             error_label = label_font.render(error_message, True, (255, 0, 0))
-            screen.blit(error_label, (WIDTH / 2 - error_label.get_width() / 2, input_passwort.y + input_passwort.height + 60))
+            screen.blit(error_label,
+                        (WIDTH / 2 - error_label.get_width() / 2, input_passwort.y + input_passwort.height + 70))
 
         pygame.display.flip()
-
-    if not user_data:
-        user_data = {'username': username, 'password': password, 'highscore': user_data[3], 'currentlevel': user_data[4]}
 
     return user_data
