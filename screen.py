@@ -4,6 +4,7 @@ from classes.variables import WIDTH, HEIGHT, WHITE, FONT, FONT_SM
 from database import get_user, add_user, show_all_user_highscore
 
 
+# Functions for drawing all the screens
 # https://www.makeuseof.com/start-menu-and-game-over-screen-with-pygame/
 def draw_startScreen(user_data):
     background = pygame.image.load('Assets/images/start.png')
@@ -137,6 +138,7 @@ def draw_loginScreen():
     username_label = FONT_SM.render('Username:', True, WHITE)
     password_label = FONT_SM.render('Password:', True, WHITE)
 
+    # color to know which input field is active
     color_active = pygame.Color(30, 160, 15)
     color_inactive = pygame.Color(255, 255, 255)
 
@@ -190,9 +192,11 @@ def draw_loginScreen():
                     if event.key == pygame.K_RETURN:
                         user_data = get_user(username, password)
                         if user_data:
+                            # check if password is connected with the right username
                             if user_data['password'] == password:
                                 running = False
                         else:
+                            # create new user, if username is not in db
                             add_user(username, password)
                             user_data = get_user(username, password)
                             if user_data:
@@ -202,6 +206,7 @@ def draw_loginScreen():
                                 username = ''
                                 password = ''
 
+        # update screen and draw
         screen.fill((30, 30, 30))
         screen.blit(background, (0, 0))
         screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 4 - title.get_height() / 2))

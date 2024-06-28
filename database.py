@@ -1,12 +1,14 @@
 import sqlite3
 
 
+# connect to database
 # help from https://medium.com/@keerthanam4141/todo-and-draw-apps-in-python-with-sqlite-database-706e6c687990
 def connect():
     conn = sqlite3.connect('bunnyworld.db')
     return conn
 
 
+# initialize db if it doesn't exists
 def init_db():
     conn = connect()
     cursor = conn.cursor()
@@ -23,6 +25,7 @@ def init_db():
     conn.close()
 
 
+# Create new user with password
 def add_user(username, password):
     conn = connect()
     cursor = conn.cursor()
@@ -34,6 +37,7 @@ def add_user(username, password):
     conn.close()
 
 
+# get the user, wenn wenn username and password are correct
 def get_user(username, password):
     conn = connect()
     cursor = conn.cursor()
@@ -50,14 +54,19 @@ def get_user(username, password):
     else:
         return None
 
+
+# update user with new highscore and level
 def update_user(username, highscore, currentlevel):
     conn = connect()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users WHERE username = ? ', (username,))
-    cursor.execute('UPDATE users SET highscore = ?, currentlevel = ? WHERE username = ?', (highscore, currentlevel, username))
+    cursor.execute('UPDATE users SET highscore = ?, currentlevel = ? WHERE username = ?',
+                   (highscore, currentlevel, username))
     conn.commit()
     conn.close()
 
+
+# update only the highscore, when username is known
 def update_highscore(username, score):
     conn = connect()
     cursor = conn.cursor()
@@ -65,6 +74,7 @@ def update_highscore(username, score):
     conn.commit()
 
 
+# getting the highscore, when the username is known
 def get_highscore(username):
     conn = connect()
     cursor = conn.cursor()
@@ -73,6 +83,7 @@ def get_highscore(username):
     return highscore[0]
 
 
+# update only the level, when username is known
 def update_level(username, level):
     conn = connect()
     cursor = conn.cursor()
@@ -80,6 +91,7 @@ def update_level(username, level):
     conn.commit()
 
 
+# getting the level, when the username is known
 def get_level(username):
     conn = connect()
     cursor = conn.cursor()
@@ -88,6 +100,7 @@ def get_level(username):
     return currentlevel[0]
 
 
+# creating a list of all users and sort with the highest score but limit it to 10
 def show_all_user_highscore():
     conn = connect()
     cursor = conn.cursor()
@@ -97,6 +110,7 @@ def show_all_user_highscore():
     return highscores
 
 
+# reset highscore to default 0 and level to default 1
 def reset_highscore_level(user_data):
     conn = connect()
     cursor = conn.cursor()

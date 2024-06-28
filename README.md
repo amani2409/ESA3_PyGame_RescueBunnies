@@ -1,7 +1,7 @@
 # Rescue Bunnies
-Rescue Bunnies is a small 2D indie game. You are playing a bunny who needs to catch all the bunnies in the level within a given time and bring them to their house.
-You can only catch one bunny at a time.
-If you are faster, you will get a better score. 
+Rescue Bunnies is a small 2D indigame. You are playing a bunny who needs to catch all the bunnies in the level within a given time and bring them to there house.
+You can only catch one bunny.
+If you are faster you will get a better score. 
 
 ## Requirements
 - Python 3.x
@@ -10,12 +10,12 @@ If you are faster, you will get a better score.
 
 ## Controls
 ### Login Screen:
-  - Enter your username and password to login or to create a new profil
+  - Enter your username and password to login or for creating a new profil
 
 ### Start Menu:
   - You can see your total highscore
-  - Press 't' to see the global highscore
-  - Press 'g' to start the game - you will continue at the last stopped level
+  - Press 'h' to see the global highscore
+  - Press 's' to start the game - you will continue at the last stopped level
   - Press 'r' to reset your highscore and level. Now you can beginn again
   - Press 'q' to quit the game
 
@@ -27,22 +27,15 @@ If you are faster, you will get a better score.
   - For navigating:
     - Press 'd' to move to the right side
     - Press 'a' to move to the left side
-    - Press 's' when you collide with a NPC Bunny to catch it
+    - Press 'g' when you collide with a NPC Bunny to catch it
     - Then move with the bunny to the house
     - Press 'w' to release it
     - Press 'esc' if you want to end this game, you will then get to the start menu
 
 ### End/Lost Screen:
-  - If you didn't rescued all the bunnies within the given time, you can try it again,
-    otherwise you won't go to the next level.
+  - if you didn't rescued all the bunnies within the given time you can try it again, otherwise you won't go to the next level
   - Press 'r' to restart the game
   - Press 'h' to return to the start menu
-  - Press 'q' to quit the game
-
-### Won Level:
-  - If you won this level you get to a new screen
-  - Press 'h' to return to the start menu
-  - Press 'n' to go to the next level
   - Press 'q' to quit the game
 
 ## File Overview:

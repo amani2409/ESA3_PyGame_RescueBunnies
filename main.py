@@ -1,20 +1,16 @@
 # I - Import and initialize
 import pygame
-from pygame.locals import *
-
-import database
 from game import game
 from screen import draw_startScreen, draw_endScreen, draw_loginScreen, draw_nextLevel, draw_highscore_screen, \
     draw_gamecompleted_screen
-from database import update_highscore, update_level, get_highscore, get_level, init_db, reset_highscore_level, update_user
-
-from classes.variables import WIDTH, HEIGHT, BLACK, WHITE
+from database import get_highscore, get_level, init_db, reset_highscore_level, update_user
 
 
 def main():
     pygame.init()
     init_db()
     display_screen = "login"
+    clock = pygame.time.Clock()
     user_data = {}
 
     keepGoing = True
@@ -29,11 +25,13 @@ def main():
 
         keys = pygame.key.get_pressed()
 
+        # Draw the first Screen - Login
         if display_screen == 'login':
             user_data = draw_loginScreen()
             if user_data:
                 display_screen = 'start_menu'
 
+        # Draw Start Menu:
         elif display_screen == 'start_menu':
             if user_data:
                 user_data['highscore'] = get_highscore(user_data['username'])
@@ -79,13 +77,14 @@ def main():
             if keys[pygame.K_q]:
                 keepGoing = False
 
+        # Draw Highscore
         elif display_screen == 'highscore':
             draw_highscore_screen()
             if keys[pygame.K_b]:
                 display_screen = 'start_menu'
                 draw_startScreen(user_data)
 
-
+        # Going to game and start the game
         elif display_screen == 'game':
             screen_result, score, new_level = game(user_data)
 
@@ -112,11 +111,11 @@ def main():
                 update_user(user_data['username'], user_data['highscore'], user_data['currentlevel'])
                 display_screen = 'game_completed'
 
+        # Draw the Page to continue to the next level
         elif display_screen == 'next_level':
             draw_nextLevel()
             pygame.display.flip()
 
-            # Wait for user input to go to the next level screen
             waiting_for_input = True
             while waiting_for_input:
                 for event in pygame.event.get():
@@ -132,6 +131,7 @@ def main():
                             keepGoing = False
                             waiting_for_input = False
 
+        # Draw End/Lost Screen
         elif display_screen == 'end_screen':
             draw_endScreen()
             if keys[pygame.K_r]:
@@ -141,6 +141,7 @@ def main():
             elif keys[pygame.K_q]:
                 keepGoing = False
 
+        # Draw the Finish Screen, if you finished all the levels
         elif display_screen == 'game_completed':
             draw_gamecompleted_screen()
             if keys[pygame.K_r]:
@@ -154,7 +155,7 @@ def main():
                 keepGoing = False
 
         pygame.display.flip()
-        # clock.tick(60)
+        clock.tick(60)
 
     pygame.quit()
 
