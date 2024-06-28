@@ -18,17 +18,12 @@ class Level:
 
         self.time_limit = 0
 
-        # self.world_shift = 0
-
     def draw(self, screen):
         screen.blit(self.background, (0, 0))
         screen.blit(self.ground, self.ground_rect)
         screen.blit(self.house, self.house_rect)
         self.npc_bunny_sprite.draw(screen)
         self.player_sprite.draw(screen)
-
-    # def shift_world(self, shift_x):
-    #     self.world_shift += shift_x
 
 
 class Level1(Level):
