@@ -27,7 +27,7 @@ If you are faster you will get a better score.
   - For navigating:
     - Press 'd' to move to the right side
     - Press 'a' to move to the left side
-    - Press 's' when you collide with a NPC Bunny to catch it
+    - Press 'enter' when you collide with a NPC Bunny to catch it
     - Then move with the bunny to the house
     - Press 'w' to release it
     - Press 'esc' if you want to end this game, you will then get to the start menu
