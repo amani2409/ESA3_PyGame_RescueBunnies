@@ -1,9 +1,8 @@
-import pygame, random
+import pygame
 from levels import *
-from classes.spritesheet import SpriteSheet
-from classes.variables import WIDTH, HEIGHT, BLACK
-from screen import draw_endScreen, draw_nextLevel
-from database import update_highscore, update_level
+from classes.variables import WIDTH, HEIGHT
+from screen import draw_nextLevel
+from database import get_level, get_highscore, update_user
 
 
 def draw_timer(screen, time, font):
@@ -24,15 +23,10 @@ def game(user_data):
 
     # http://programarcadegames.com/python_examples/en/sprite_sheets/
     level_list = [Level1, Level2]
+    if level_nr > len(level_list):
+        return 'game_completed', user_data['highscore'], user_data['currentlevel']
     level = level_list[level_nr - 1]()
     text_level = font.render('Level ' + str(level_nr), True, (255, 255, 255))
-
-    # later to do the loop dynamical
-    # for i in range(level_count):
-    #     level_list.append(level.Level.__str__(i))
-
-    # current_level = 0  # later get number of the logged user
-    # current_level = level_list[current_level]
 
     score = 0
 
@@ -57,13 +51,6 @@ def game(user_data):
                 time_limit -= 1
                 if time_limit <= 0:
                     return 'end_screen', score, level_nr
-                # if time_limit >= 0:
-                #     if player.count_catched_bunny == all_bunnies:
-                #         score = time_limit
-                #         update_highscore(user_data['username'], user_data['highscore'] + score)
-                #         update_level(user_data['username'], user_data['currentlevel'] + 1)
-                #         draw_nextLevel()
-                #         return 'next_level', score, level_nr
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -75,11 +62,6 @@ def game(user_data):
 
         if keys[pygame.K_ESCAPE]:
             return 'start_menu', score, level_nr
-
-        # if player.count_catched_bunny == all_bunnies:
-        #     update_highscore(user_data['username'], user_data['highscore'])
-        #     update_level(user_data['username'], user_data['currentlevel'])
-        #     draw_nextLevel()
 
         player.catch_release(npc_bunny_sprite, level.house_rect)
 
@@ -105,11 +87,12 @@ def game(user_data):
 
         if player.count_catched_bunny == all_bunnies:
             score = time_limit
-            update_highscore(user_data['username'], user_data['highscore'] + score)
-            update_level(user_data['username'], user_data['currentlevel'] + 1)
+            update_user(user_data['username'], user_data['highscore'] + time_limit, user_data['currentlevel'] + 1)
+            new_highscore = get_highscore(user_data['username'])
+            new_level = get_level(user_data['username'])
             draw_nextLevel()
-            return 'next_level', score, level_nr
+            if level_nr + 1 > len(level_list):
+                return 'game_completed', new_highscore, new_level
+            else:
+                return 'next_level', new_highscore, new_level
 
-
-    new_level = level_nr + 1
-    return 'next_level', score, new_level

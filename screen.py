@@ -19,20 +19,24 @@ def draw_startScreen(user_data):
     highscore = FONT.render(f'Highscore: {user_data['highscore']}', True, WHITE)
     highscore_rect = highscore.get_rect(center=(WIDTH / 2, HEIGHT / 3))
 
-    all_highscore = FONT_SM.render('Show all Highscore [h]', True, WHITE)
+    all_highscore = FONT_SM.render('Show all Highscore [t]', True, WHITE)
     all_highscore_rect = all_highscore.get_rect(center=(WIDTH / 2, HEIGHT / 2))
 
-    start_button = FONT_SM.render('Start [s]', True, WHITE)
+    start_button = FONT_SM.render('Start [g]', True, WHITE)
     start_button_rect = start_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 100))
 
+    reset_button = FONT_SM.render('Reset [r]', True, WHITE)
+    reset_button_rect = reset_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 150))
+
     quit_button = FONT_SM.render('Quit [q]', True, WHITE)
-    quit_button_rect = quit_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 150))
+    quit_button_rect = quit_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 200))
 
     screen.blit(background, (0, 0))  # blit wird genutzt um eine Sache auf einen andere Sache/Oberfläche zu zeichnen
     screen.blit(title, title_rect)
     screen.blit(highscore, highscore_rect)
     screen.blit(all_highscore, all_highscore_rect)
     screen.blit(start_button, start_button_rect)
+    screen.blit(reset_button, reset_button_rect)
     screen.blit(quit_button, quit_button_rect)
     pygame.display.update()
 
@@ -64,6 +68,7 @@ def draw_highscore_screen():
 
     pygame.display.update()
 
+
 def draw_endScreen():
     background = pygame.image.load('Assets/images/lostscene.png')
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
@@ -72,17 +77,23 @@ def draw_endScreen():
 
     pygame.display.set_caption('End Screen')
 
-    title = FONT.render('GameOver', True, (255, 255, 255))
-    restart_button = FONT_SM.render('Restart [r]', True, (255, 255, 255))
-    home_button = FONT_SM.render('Home Screen [h]', True, (255, 255, 255))
-    quit_button = FONT_SM.render('Quit [q]', True, (255, 255, 255))
+    title = FONT.render('GameOver', True, WHITE)
+    title_rect = title.get_rect(center=(WIDTH / 2, HEIGHT / 4))
+
+    restart_button = FONT_SM.render('Restart [r]', True, WHITE)
+    restart_button_rect = restart_button.get_rect(center=(WIDTH / 2, HEIGHT / 2))
+
+    home_button = FONT_SM.render('Home Screen [h]', True, WHITE)
+    home_button_rect = home_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 100))
+
+    quit_button = FONT_SM.render('Quit [q]', True, WHITE)
+    quit_button_rect = quit_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 150))
 
     screen.blit(background, (0, 0))
-    screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 4 - title.get_height() / 2))
-    screen.blit(restart_button,
-                (WIDTH / 2 - restart_button.get_width() / 2, HEIGHT / 2 - restart_button.get_height() / 2))
-    screen.blit(home_button, (WIDTH / 2 - home_button.get_width() / 2, HEIGHT / 2 + restart_button.get_height()))
-    screen.blit(quit_button, (WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 4 + restart_button.get_height()))
+    screen.blit(title, title_rect)
+    screen.blit(restart_button, restart_button_rect)
+    screen.blit(home_button, home_button_rect)
+    screen.blit(quit_button, quit_button_rect)
     pygame.display.update()
 
 
@@ -93,18 +104,23 @@ def draw_nextLevel():
     screen.fill((0, 0, 0))
 
     pygame.display.set_caption('Winning Screen')
-    title = FONT.render('Won: You made it!', True, (255, 255, 255))
-    restart_button = FONT_SM.render('Restart [r]', True, (255, 255, 255))
-    next_button = FONT_SM.render('next Level [n]', True, (255, 255, 255))
-    home_button = FONT_SM.render('Home Screen [h]', True, (255, 255, 255))
-    quit_button = FONT_SM.render('Quit [q]', True, (255, 255, 255))
+    title = FONT.render('Won: You made it!', True, WHITE)
+    title_rect = title.get_rect(center=(WIDTH / 2, HEIGHT / 4))
+
+    next_button = FONT_SM.render('next Level [n]', True, WHITE)
+    next_button_rect = next_button.get_rect(center=(WIDTH / 2, HEIGHT / 2))
+
+    home_button = FONT_SM.render('Home Screen [h]', True, WHITE)
+    home_button_rect = home_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 100))
+
+    quit_button = FONT_SM.render('Quit [q]', True, WHITE)
+    quit_button_rect = quit_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 150))
+
     screen.blit(background, (0, 0))
-    screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 4 - title.get_height() / 2))
-    screen.blit(restart_button,
-                (WIDTH / 2 - restart_button.get_width() / 2, HEIGHT / 2 - restart_button.get_height() / 2))
-    screen.blit(home_button, (WIDTH / 2 - home_button.get_width() / 2, HEIGHT / 2 + restart_button.get_height()))
-    screen.blit(next_button, (WIDTH / 2 - next_button.get_width() / 2, HEIGHT / 4 + restart_button.get_height()))
-    screen.blit(quit_button, (WIDTH / 2 - quit_button.get_width() / 2, HEIGHT / 6 + restart_button.get_height()))
+    screen.blit(title, title_rect)
+    screen.blit(next_button, next_button_rect)
+    screen.blit(home_button, home_button_rect)
+    screen.blit(quit_button, quit_button_rect)
     pygame.display.update()
 
 
@@ -113,8 +129,6 @@ def draw_loginScreen():
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Login')
-    # font = pygame.font.SysFont('Arial', 50)
-    # label_font = pygame.font.SysFont('Arial', 30)
     title = FONT.render('Enter your username and password!', True, WHITE)
     enter_button = FONT.render('Login [press Enter]!', True, WHITE)
     input_username = pygame.Rect(WIDTH / 2 - 100, HEIGHT / 2 - 60, 200, 40)
@@ -128,7 +142,6 @@ def draw_loginScreen():
 
     color_user = color_inactive
     color_pw = color_inactive
-
 
     active_username = False
     active_password = False
@@ -189,7 +202,6 @@ def draw_loginScreen():
                                 username = ''
                                 password = ''
 
-
         screen.fill((30, 30, 30))
         screen.blit(background, (0, 0))
         screen.blit(title, (WIDTH / 2 - title.get_width() / 2, HEIGHT / 4 - title.get_height() / 2))
@@ -220,3 +232,34 @@ def draw_loginScreen():
         pygame.display.flip()
 
     return user_data
+
+
+def draw_gamecompleted_screen():
+    background = pygame.image.load('Assets/images/start.png')
+    background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+    screen = pygame.display.get_surface()
+    screen.fill((0, 0, 0))
+
+    pygame.display.set_caption('Game Completed')
+
+    title = FONT.render('You finished.', True, WHITE)
+    title_rect = title.get_rect(center=(WIDTH / 2, HEIGHT / 4))
+    title2 = FONT.render('Do you want to resett all and restart?', True, WHITE)
+    title2_rect = title2.get_rect(center=(WIDTH / 2, HEIGHT / 3))
+
+    restart_button = FONT_SM.render('Reset highscore and Restart [r]', True, WHITE)
+    restart_button_rect = restart_button.get_rect(center=(WIDTH / 2, HEIGHT / 2))
+
+    home_button = FONT_SM.render('Home Screen [h]', True, WHITE)
+    home_button_rect = home_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 100))
+
+    quit_button = FONT_SM.render('Quit [q]', True, WHITE)
+    quit_button_rect = quit_button.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 150))
+
+    screen.blit(background, (0, 0))
+    screen.blit(title, title_rect)
+    screen.blit(title2, title2_rect)
+    screen.blit(restart_button, restart_button_rect)
+    screen.blit(home_button, home_button_rect)
+    screen.blit(quit_button, quit_button_rect)
+    pygame.display.update()
