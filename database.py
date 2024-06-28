@@ -90,3 +90,11 @@ def show_all_user_highscore():
     highscores = cursor.fetchall()
     conn.close()
     return highscores
+
+
+def reset_highscore_level(user_data):
+    conn = connect()
+    cursor = conn.cursor()
+    cursor.execute('UPDATE users SET highscore = ?, currentlevel = ? WHERE username = ?', (0, 1, user_data['username']))
+    conn.commit()
+    conn.close()

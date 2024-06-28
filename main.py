@@ -5,7 +5,7 @@ from pygame.locals import *
 import database
 from game import game
 from screen import draw_startScreen, draw_endScreen, draw_loginScreen, draw_nextLevel, draw_highscore_screen
-from database import update_highscore, update_level, get_highscore, get_level, init_db
+from database import update_highscore, update_level, get_highscore, get_level, init_db, reset_highscore_level
 
 from classes.variables import WIDTH, HEIGHT, BLACK, WHITE
 
@@ -18,7 +18,7 @@ def main():
 
     keepGoing = True
     # L - Set up loop
-    # prüft immer ob irgendwann das Programm beendet wurde
+    # main loop for running the programm
     while keepGoing:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -26,7 +26,6 @@ def main():
                 pygame.quit()
                 quit()
 
-        # if display_screen == "login":
         keys = pygame.key.get_pressed()
 
         if display_screen == 'login':
@@ -38,7 +37,7 @@ def main():
             if user_data:
                 draw_startScreen(user_data)
 
-            if keys[pygame.K_s]:
+            if keys[pygame.K_g]:
                 display_screen = 'game'
                 screen_result, score, new_level = game(user_data)
 
@@ -61,6 +60,12 @@ def main():
             if keys[pygame.K_h]:
                 display_screen = 'highscore'
 
+            if keys[pygame.K_r]:
+                reset_highscore_level(user_data)
+                user_data['highscore'] = 0
+                user_data['currentlevel'] = 1
+                draw_startScreen(user_data)
+
             if keys[pygame.K_q]:
                 keepGoing = False
 
@@ -69,7 +74,6 @@ def main():
             if keys[pygame.K_b]:
                 display_screen = 'start_menu'
                 draw_startScreen(user_data)
-
 
 
         elif display_screen == 'game':
@@ -95,15 +99,12 @@ def main():
             draw_nextLevel()
             pygame.display.flip()
 
-            # Wait for user input on next level screen
+            # Wait for user input to go to the next level screen
             waiting_for_input = True
             while waiting_for_input:
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_r:
-                            display_screen = 'game'
-                            waiting_for_input = False
-                        elif event.key == pygame.K_h:
+                        if event.key == pygame.K_h:
                             display_screen = 'start_menu'
                             waiting_for_input = False
                         elif event.key == pygame.K_n:
