@@ -15,7 +15,7 @@ If you are faster you will get a better score.
 ### Start Menu:
   - You can see your total highscore
   - Press 'h' to see the global highscore
-  - Press 's' to start the game - you will continue at the last stopped level
+  - Press 'g' to start the game - you will continue at the last stopped level
   - Press 'r' to reset your highscore and level. Now you can beginn again
   - Press 'q' to quit the game
 
@@ -27,7 +27,7 @@ If you are faster you will get a better score.
   - For navigating:
     - Press 'd' to move to the right side
     - Press 'a' to move to the left side
-    - Press 'g' when you collide with a NPC Bunny to catch it
+    - Press 's' when you collide with a NPC Bunny to catch it
     - Then move with the bunny to the house
     - Press 'w' to release it
     - Press 'esc' if you want to end this game, you will then get to the start menu
